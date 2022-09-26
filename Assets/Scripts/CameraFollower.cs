@@ -46,12 +46,14 @@ public class CameraFollower : MonoBehaviour
         //Screen.SetResolution(640, 480, true);
 
         smoothTime_s = 0.03f;
-        smoothTimeXZ_s = 0.012f;
+        //smoothTimeXZ_s = 0.012f;
+        smoothTimeXZ_s = 1.00012f;
         rotateSmoothTime_s = 0.00f;
         //offsetCameraLook_m.Set(0.0f, 0.35f, 0.0f);
         offsetCameraLook_m.Set(0.0f, 0.3855f, 0.0f);
         defaultLookDownAngle_deg = 15.0f;
-        defaultOffsetPosRef_m.Set(0.0f, 0.65f, -1.0f);
+        //defaultOffsetPosRef_m.Set(0.0f, 0.65f, -1.0f);
+        defaultOffsetPosRef_m.Set(0.0f, 5.65f, -8.0f);
         mainMenuPos_m.Set(0.0f, 500.0f, 0.0f);
         mainMenuCameraAngle_deg = 0.0f;
         mainMenuCameraRadius_m = 200.0f;
@@ -105,7 +107,8 @@ public class CameraFollower : MonoBehaviour
         Vector3 smoothDampPosXZ = Vector3.SmoothDamp(transform.position, golfBall.position + offsetPosRef_m, ref referencePos_m, smoothTimeXZ_s);
 
         // Moved to the combined smoothdamp position
-        transform.position = new Vector3(smoothDampPosXZ.x, smoothDampPosY.y, smoothDampPosXZ.z);
+        //transform.position = new Vector3(smoothDampPosXZ.x, smoothDampPosY.y, smoothDampPosXZ.z);
+        transform.position = new Vector3(defaultOffsetPosRef_m.x, defaultOffsetPosRef_m.y, defaultOffsetPosRef_m.z);
 
 
         // ------------ ROTATION ----------------
@@ -121,7 +124,8 @@ public class CameraFollower : MonoBehaviour
         }
 
         // Rotate the camera in roll and yaw, but keep pitch the same 
-        transform.rotation = Quaternion.Euler(lookDownAngle, ballRotation.eulerAngles.y, ballRotation.eulerAngles.z);
+        //transform.rotation = Quaternion.Euler(lookDownAngle, ballRotation.eulerAngles.y, ballRotation.eulerAngles.z);
+        transform.rotation = Quaternion.Euler(lookDownAngle, 0.0f, ballRotation.eulerAngles.z);
 
     }
 

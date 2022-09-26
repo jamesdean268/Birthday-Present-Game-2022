@@ -10,7 +10,7 @@ public class TouchManagerScript : MonoBehaviour
     public FixedTouchField fixedTouchField;
 
     // Touch variables
-    private float rotationSpeed;
+    private float smashFactor;
 
     // Game Objects
     public GameObject golfBallObject;
@@ -18,7 +18,7 @@ public class TouchManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rotationSpeed = 0.15f;
+        smashFactor = 15.0f;
     }
 
     // Force Variables
@@ -28,9 +28,21 @@ public class TouchManagerScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        forceVector.x += fixedTouchField.TouchDist.x * rotationSpeed;
-        forceVector.z += fixedTouchField.TouchDist.y * rotationSpeed;
-
+        if (fixedTouchField.Pressed)
+        {
+            forceVector.x += fixedTouchField.TouchDist.x * smashFactor;
+            forceVector.y += fixedTouchField.TouchDist.y * smashFactor * 0.3f;
+            forceVector.z += fixedTouchField.TouchDist.y * smashFactor;
+        } else
+        {
+            if (Mathf.Abs(forceVector.magnitude) > 0)
+            {
+                golfBallObject.GetComponent<BallMotion>().isHit = true;
+                golfBallObject.GetComponent<BallMotion>().forceVector = forceVector;
+            }
+            forceVector = Vector3.zero;
+        }
+        
     }
 
 }
