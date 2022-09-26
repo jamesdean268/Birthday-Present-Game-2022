@@ -27,7 +27,7 @@ public class CameraFollower : MonoBehaviour
     public GameObject golfBallObject;
 
     // GameManger
-    public GameObject gameManager;
+    //public GameObject gameManager;
     private GameObject lowPolyTerrain;
     private GameObject uiManager;
 
@@ -35,18 +35,11 @@ public class CameraFollower : MonoBehaviour
     void Start()
     {
         // Get the UI Manager Game Object
-        uiManager = GameObject.FindGameObjectWithTag("UIManager");
-        if (uiManager.GetComponent<UIManagerScript>().useLowPolyTerrain)
+        GameObject[] terrains = GameObject.FindGameObjectsWithTag("Terrain");
+        foreach (GameObject terrainObject in terrains)
         {
-            GameObject[] terrains = GameObject.FindGameObjectsWithTag("Terrain");
-            foreach (GameObject terrainObject in terrains)
-            {
-                if (terrainObject.name == "Terrain_Low_Poly_Tee_Box_Update")
-                {
-                    lowPolyTerrain = terrainObject;
-                    break;
-                }
-            }
+            lowPolyTerrain = terrainObject;
+            break;
         }
 
         // Set Screen Reolution to try reduce rendering workload on Android
@@ -69,32 +62,7 @@ public class CameraFollower : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (gameManager.GetComponent<GameManagerScript>().gameState == 0)
-        {
-
-            // Update Camera Rotation Angle
-            mainMenuCameraAngle_deg += 0.001f;
-            float mainMenuLookAngle_deg = mainMenuCameraAngle_deg + 20.0f;
-
-            // Translation
-            transform.position = new Vector3(mainMenuCameraRadius_m * Mathf.Cos(mainMenuCameraAngle_deg), mainMenuCameraAltitude_m, mainMenuCameraRadius_m * Mathf.Sin(mainMenuCameraAngle_deg));
-
-            // Look just in front towards the centre
-            Vector3 lookAtPosition_m = new Vector3(mainMenuCameraRadius_m / 2.0f * Mathf.Cos(mainMenuLookAngle_deg), mainMenuCameraAltitude_m / 2.0f, mainMenuCameraRadius_m * Mathf.Sin(mainMenuLookAngle_deg));
-
-            // Rotation
-            transform.rotation = Quaternion.LookRotation(-transform.position);
-
-        }
-        else
-        {
-            bool hitWaterOrLava = golfBallObject.GetComponent<BallMotion>().hitWaterOrLava;
-            if (!hitWaterOrLava)
-            {
-                UpdateTranslationAndRotation();
-            }
-        }
-
+        UpdateTranslationAndRotation();
     }
 
     void UpdateTranslationAndRotation()
@@ -106,7 +74,8 @@ public class CameraFollower : MonoBehaviour
         offsetPosRef_m = defaultOffsetPosRef_m;
 
         // Rotate offset position in space based on dirAngle_deg from the ball
-        offsetPosRef_m = Quaternion.Euler(0.0f, golfBallObject.GetComponent<BallMotion>().dirAngle_deg, 0.0f) * offsetPosRef_m;
+        //offsetPosRef_m = Quaternion.Euler(0.0f, golfBallObject.GetComponent<BallMotion>().dirAngle_deg, 0.0f) * offsetPosRef_m;
+        offsetPosRef_m = Quaternion.Euler(0.0f, 0.0f, 0.0f) * offsetPosRef_m;
 
         // Increase offsetPosRef_m by a little bit based on velocity of the ball
         offsetPosRef_m.x *= (golfBall.velocity.magnitude / 20.0f + 1) * (Time.smoothDeltaTime + 1);
@@ -119,15 +88,9 @@ public class CameraFollower : MonoBehaviour
 
         // Add extra y offset if camera is going to go underground
         float terrainHeight_m;
-        if (uiManager.GetComponent<UIManagerScript>().useLowPolyTerrain)
-        {
-            //lowPolyTerrain.transform.TransformPoint()
-            terrainHeight_m = calculateTerrainHeight();
-        }
-        else
-        {
-            terrainHeight_m = Terrain.activeTerrain.SampleHeight(transform.position);
-        }
+        //lowPolyTerrain.transform.TransformPoint()
+        terrainHeight_m = calculateTerrainHeight();
+
         previousTerrainHeight_m = terrainHeight_m;
         //Debug.Log(terrainHeight_m);
         bool lookDownALittle = false;
