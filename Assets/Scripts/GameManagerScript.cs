@@ -15,7 +15,7 @@ public class GameManagerScript : MonoBehaviour
             {
                 // Create Cube
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = new Vector3(i, j, 50.0f);
+                cube.transform.position = new Vector3(i, j, 40.0f);
                 var cubeRenderer = cube.GetComponent<Renderer>();
                 cubeRenderer.material.SetColor("_Color", Color.red);
                 Rigidbody cubeRigidBody = cube.AddComponent<Rigidbody>();

@@ -51,7 +51,7 @@ public class CameraFollower : MonoBehaviour
         rotateSmoothTime_s = 0.00f;
         //offsetCameraLook_m.Set(0.0f, 0.35f, 0.0f);
         offsetCameraLook_m.Set(0.0f, 0.3855f, 0.0f);
-        defaultLookDownAngle_deg = 15.0f;
+        defaultLookDownAngle_deg = 10.0f;
         //defaultOffsetPosRef_m.Set(0.0f, 0.65f, -1.0f);
         defaultOffsetPosRef_m.Set(0.0f, 5.65f, -8.0f);
         mainMenuPos_m.Set(0.0f, 500.0f, 0.0f);
